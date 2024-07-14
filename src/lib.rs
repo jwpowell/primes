@@ -134,10 +134,14 @@ pub fn factorize(n: u64, factors: &mut Vec<u64>) {
 
     factors.clear();
 
-    for p in primes().take_while(|&p| p * p <= n) {
+    for p in primes() {
         while k % p == 0 {
             factors.push(p);
             k /= p;
+        }
+
+        if k == 1 {
+            break;
         }
     }
 
@@ -227,6 +231,17 @@ mod tests {
     fn factorize_01() {
         let mut fs = vec![];
         let expected = vec![2, 3, 3, 5, 13, 101];
+        let n = expected.iter().product();
+
+        factorize(n, &mut fs);
+
+        assert_eq!(fs, expected);
+    }
+
+    #[test]
+    fn factorize_02() {
+        let mut fs = vec![];
+        let expected = vec![2, 3];
         let n = expected.iter().product();
 
         factorize(n, &mut fs);
